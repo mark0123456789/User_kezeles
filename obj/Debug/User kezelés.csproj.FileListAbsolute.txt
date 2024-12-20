@@ -1,0 +1,9 @@
+C:\Users\piringerm\source\repos\User kezelés\bin\Debug\User kezelés.exe.config
+C:\Users\piringerm\source\repos\User kezelés\bin\Debug\User kezelés.exe
+C:\Users\piringerm\source\repos\User kezelés\bin\Debug\User kezelés.pdb
+C:\Users\piringerm\source\repos\User kezelés\obj\Debug\User kezelés.csproj.AssemblyReference.cache
+C:\Users\piringerm\source\repos\User kezelés\obj\Debug\User_kezelés.Properties.Resources.resources
+C:\Users\piringerm\source\repos\User kezelés\obj\Debug\User kezelés.csproj.GenerateResource.cache
+C:\Users\piringerm\source\repos\User kezelés\obj\Debug\User kezelés.csproj.CoreCompileInputs.cache
+C:\Users\piringerm\source\repos\User kezelés\obj\Debug\User kezelés.exe
+C:\Users\piringerm\source\repos\User kezelés\obj\Debug\User kezelés.pdb
