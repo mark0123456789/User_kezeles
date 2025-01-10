@@ -9,7 +9,7 @@ namespace User_kezelés
 {
 
 
-    internal class Connect
+    public class Connect
     {
         public MySqlConnection Connection;
         public string Host;
@@ -24,7 +24,7 @@ namespace User_kezelés
 
         {
             Host = "localhost";
-            Database = "user_ketekes";
+            Database = "User";
             User = "root";
             Password = "";
 
