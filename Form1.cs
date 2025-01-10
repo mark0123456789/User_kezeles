@@ -1,16 +1,6 @@
-﻿using Google.Protobuf;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace User_kezelés
 {
@@ -18,11 +8,11 @@ namespace User_kezelés
     {
 
         public static Connect conn = new Connect();
-        public static void Getdata()
+        public static void vegignezes()
         {
             conn.Connection.Open();
 
-            string sql = "SELECT `FirstName`, `LastName`, `Password` FROM `data`";        
+            string sql = "SELECT `ID`,`FirstName`,`LastName`,`Password` FROM `data`";
 
             MySqlCommand cmd = new MySqlCommand(sql, conn.Connection);
 
@@ -32,12 +22,13 @@ namespace User_kezelés
 
             do
             {
-                var user = new
-                {
-                    FirstName = dr.GetString(1),
-                    LastName = dr.GetString(2),
-                    Password = dr.GetString(3),
-                };
+
+                int id = dr.GetInt32(0);
+                string FirstName = dr.GetString(1);
+                string LastName = dr.GetString(2);
+                string Password = dr.GetString(3);
+
+
 
 
             } while (dr.Read());
@@ -45,14 +36,12 @@ namespace User_kezelés
             dr.Close();
 
 
-
             conn.Connection.Close();
         }
+
         public static void addNewfelhasznalo(string firstname, string lastname, int password)
 
         {
-            try
-            {
                 conn.Connection.Open();
 
                 string sql = $"INSERT INTO `data`(`FirstName`, `LastName`, `Password`) VALUES ('{firstname}','{lastname}','{password}')";
@@ -62,14 +51,6 @@ namespace User_kezelés
                 cmd.ExecuteNonQuery();
 
                 conn.Connection.Close();
-            }
-            catch (Exception exeption)
-            {
-                Console.WriteLine(exeption.Message);
-                Console.ReadKey();
-            }
-
-
         }
 
         public Form1()
@@ -91,8 +72,8 @@ namespace User_kezelés
         {
             var nev = textBox1.Text;
             var jelszo = textBox2.Text;
+           
 
-            if ()
         }
 
         private void textBox5_TextChanged(object sender, EventArgs e)
