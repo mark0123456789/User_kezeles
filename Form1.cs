@@ -39,18 +39,21 @@ namespace User_kezelés
             conn.Connection.Close();
         }
 
-        public static void addNewfelhasznalo(string firstname, string lastname, int password)
+        public static void addNewfelhasznalo()
 
         {
-                conn.Connection.Open();
+            Form1 form = new Form1();
 
-                string sql = $"INSERT INTO `data`(`FirstName`, `LastName`, `Password`) VALUES ('{firstname}','{lastname}','{password}')";
+            string query = "INSERT INTO data (FirstName, LastName, Password) VALUES (@FirstName, @LastName, @Password);";
+            using (var command = new MySqlCommand(query, conn.Connection))
+            {
+                command.Parameters.AddWithValue("@FirstName", form.textBox3.Text);
+                command.Parameters.AddWithValue("@LastName", form.textBox4.Text);
+                command.Parameters.AddWithValue("@Password", form.textBox5.Text);
+                command.ExecuteNonQuery();
+                Console.WriteLine("A felhasználó sikeresen hozzáadva.");
+            }
 
-                MySqlCommand cmd = new MySqlCommand(sql, conn.Connection);
-
-                cmd.ExecuteNonQuery();
-
-                conn.Connection.Close();
         }
 
         public Form1()
@@ -72,7 +75,7 @@ namespace User_kezelés
         {
             var nev = textBox1.Text;
             var jelszo = textBox2.Text;
-           
+            vegignezes();
 
         }
 
