@@ -13,6 +13,8 @@ namespace User_kezelés
         public Form1()
         {
             InitializeComponent();
+            hidereg();
+            feltolt();
         }
 
         private bool beleptet(string firstname, string lastname, string pass)

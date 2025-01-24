@@ -24,7 +24,7 @@ namespace User_kezelés
 
         {
             Host = "localhost";
-            Database = "user_ketekes";
+            Database = "user";
             User = "root";
             Password = "";
 
