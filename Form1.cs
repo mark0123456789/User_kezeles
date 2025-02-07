@@ -46,6 +46,9 @@ namespace User_kezelés
 
             conn.Connection.Close();
 
+            listBox1.Items.Clear();
+            feltolt();
+
            return result > 0 ? "sikeres regisztrálció" : "sikertelen regisztráció";
 
         }
@@ -53,7 +56,7 @@ namespace User_kezelés
         private void button1_Click(object sender, EventArgs e)
         {
             string[] darabol = textBox1.Text.Split(' ');
-            if (beleptet(darabol[1], darabol[0], textBox2.Text) == true)
+            if (beleptet(darabol[0], darabol[1], textBox2.Text) == true)
             {
                 MessageBox.Show("regisztrált tag.");
             }
@@ -114,6 +117,28 @@ namespace User_kezelés
             button2.Visible = true;
         }
 
+        private void listbox1_doublecick(object sender, EventArgs e)
+        {
+            string id= listBox1.SelectedItem.ToString();
+
+            string[] idDarabol = id.Split('.');
+
+            conn.Connection.Open();
+
+            string sql = $"DELETE FROM `data` WHERE `ID` = '{idDarabol}'";
+
+            MySqlCommand cmd = new MySqlCommand(sql, conn.Connection);
+            MySqlDataReader dr = cmd.ExecuteReader();
+
+            var result = cmd.ExecuteNonQuery();
+
+            conn.Connection.Close();
+
+            listBox1.Items.Clear();
+            feltolt();
+
+
+        }
     }
 
 }
