@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Bcpg;
 using System;
 using System.Windows.Forms;
 
@@ -13,10 +14,12 @@ namespace User_kezelés
         public Form1()
         {
             InitializeComponent();
+            ControlBox = false;
+            radioButton1.Checked = true;
             hidereg();
             feltolt();
         }
-
+        private static int userId = 0;
         private bool beleptet(string firstname, string lastname, string pass)
         {
             conn.Connection.Open();
@@ -24,16 +27,16 @@ namespace User_kezelés
             string sql = $"SELECT `ID` FROM `data` WHERE `FirstName`= '{firstname}' and `LastName`= '{lastname}' and `Password`= '{pass}'";
 
             MySqlCommand cmd = new MySqlCommand(sql, conn.Connection);
-           MySqlDataReader dr = cmd.ExecuteReader();
+            MySqlDataReader dr = cmd.ExecuteReader();
 
             bool van = dr.Read();
 
             conn.Connection.Close();
 
-                return van;
+            return van;
 
         }
-        private string regisztrál(string firstname, string lastname, string pass) 
+        private string regisztrál(string firstname, string lastname, string pass)
         {
 
             conn.Connection.Open();
@@ -42,14 +45,14 @@ namespace User_kezelés
 
             MySqlCommand cmd = new MySqlCommand(sql, conn.Connection);
 
-                var result = cmd.ExecuteNonQuery();
+            var result = cmd.ExecuteNonQuery();
 
             conn.Connection.Close();
 
             listBox1.Items.Clear();
             feltolt();
 
-           return result > 0 ? "sikeres regisztrálció" : "sikertelen regisztráció";
+            return result > 0 ? "sikeres regisztrálció" : "sikertelen regisztráció";
 
         }
 
@@ -65,23 +68,31 @@ namespace User_kezelés
                 MessageBox.Show("nem regisztrált tag.");
                 showreg();
                 string[] darabol2 = textBox1.Text.Split(' ');
-                textBox5.Text = darabol2[1];
-                textBox4.Text = darabol2[0];
+                textBox5.Text = darabol2[0];
+                textBox4.Text = darabol2[1];
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (textBox3==textBox6)
+            if (radioButton1.Checked == true && textBox3 == textBox6) {
+                MessageBox.Show( Frissit(userId, textBox5.Text, textBox4.Text, textBox3.Text));
+                listBox1.Items.Clear();
+                feltolt();
+                hidereg();
+
+            }
+
+            else if(textBox3 == textBox6)
             {
-            regisztrál(textBox5.Text, textBox4.Text, textBox3.Text);
+                regisztrál(textBox5.Text, textBox4.Text, textBox3.Text);
                 hidereg();
             }
             else
             {
                 MessageBox.Show("A két jelszó nem eggyezik meg");
             }
-        
+
         }
 
         private void feltolt()
@@ -95,12 +106,13 @@ namespace User_kezelés
 
             bool van = dr.Read();
 
-            while (dr.Read()) {
-           
-                listBox1.Items.Add($"{dr.GetInt32(0)},{dr.GetString(1)},{dr.GetString(2)},{dr.GetDateTime(3).ToString("yyyy-MM-dd")}");
+            while (dr.Read())
+            {
+
+                listBox1.Items.Add($"{dr.GetInt32(0)}.{dr.GetString(1)},{dr.GetString(2)},{dr.GetDateTime(3).ToString("yyyy-MM-dd")}");
             }
             conn.Connection.Close();
-            
+
         }
 
         private void hidereg()
@@ -117,27 +129,51 @@ namespace User_kezelés
             button2.Visible = true;
         }
 
-        private void listbox1_doublecick(object sender, EventArgs e)
+        private string Frissit(int id, string firtname, string lastname, string password) 
+        
         {
-            string id= listBox1.SelectedItem.ToString();
-
-            string[] idDarabol = id.Split('.');
-
             conn.Connection.Open();
-
-            string sql = $"DELETE FROM `data` WHERE `ID` = '{idDarabol}'";
-
+            string sql = $"UPDATE `data` SET `FirstName`='{firtname}',`LastName`='{lastname}',`Password`='{password}' WHERE `Id`= {id}";
             MySqlCommand cmd = new MySqlCommand(sql, conn.Connection);
-            MySqlDataReader dr = cmd.ExecuteReader();
-
             var result = cmd.ExecuteNonQuery();
-
             conn.Connection.Close();
+            return result > 0 ? "Sikeres frissítés" : "Sikertelen frissítés.";
 
-            listBox1.Items.Clear();
-            feltolt();
+        }
 
+        private string torol()
+        {
+            conn.Connection.Open();
+            string sql = $"DELETE FROM `data` WHERE `Id`= '{userId}'";
+            MySqlCommand cmd = new MySqlCommand(sql, conn.Connection);
+            var result = cmd.ExecuteNonQuery();
+            conn.Connection.Close();
+            return result > 0 ? "Sikeres törlés" : "Sikertelen törlés.";
+        }
+        private void listbox1_doublecick(object sender, EventArgs e)
 
+        {
+            string[] getId = listBox1.SelectedItem.ToString().Split('.');
+            userId = int.Parse(getId[0].TrimEnd());
+
+            if (radioButton2.Checked == true)
+            {
+                MessageBox.Show(torol());
+                listBox1.Items.Clear();
+                feltolt();
+            }
+            else
+            {
+                showreg();
+                string[] darabolNev = listBox1.SelectedItem.ToString().Split(' ');
+                textBox4.Text = darabolNev[2];
+                textBox3.Text = darabolNev[1];
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 
